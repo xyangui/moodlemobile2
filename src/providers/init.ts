@@ -47,7 +47,7 @@ export interface CoreInitHandler {
     blocking?: boolean;
 }
 
-/*
+/**
  * Provider for initialisation mechanisms.
  */
 @Injectable()

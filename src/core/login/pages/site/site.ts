@@ -35,9 +35,14 @@ export class CoreLoginSitePage {
     displayAsButtons = false;
     showKeyboard = false;
 
-    constructor(navParams: NavParams, private navCtrl: NavController, fb: FormBuilder, private appProvider: CoreAppProvider,
-            private sitesProvider: CoreSitesProvider, private loginHelper: CoreLoginHelperProvider,
-            private modalCtrl: ModalController, private domUtils: CoreDomUtilsProvider) {
+    constructor(navParams: NavParams,
+                private navCtrl: NavController,
+                fb: FormBuilder,
+                private appProvider: CoreAppProvider,
+                private sitesProvider: CoreSitesProvider,
+                private loginHelper: CoreLoginHelperProvider,
+                private modalCtrl: ModalController,
+                private domUtils: CoreDomUtilsProvider) {
 
         this.showKeyboard = !!navParams.get('showKeyboard');
 
@@ -57,6 +62,7 @@ export class CoreLoginSitePage {
 
     /**
      * Try to connect to a site.
+     * 第一页连接site
      */
     connect(url: string): void {
         this.appProvider.closeKeyboard();
@@ -78,17 +84,24 @@ export class CoreLoginSitePage {
 
         if (siteData) {
             // It's a demo site.
-            this.sitesProvider.getUserToken(siteData.url, siteData.username, siteData.password).then((data) => {
-                return this.sitesProvider.newSite(data.siteUrl, data.token, data.privateToken).then(() => {
-                    return this.loginHelper.goToSiteInitialPage();
-                }, (error) => {
-                    this.domUtils.showErrorModal(error);
+            this.sitesProvider
+                .getUserToken(siteData.url, siteData.username, siteData.password)
+                .then((data) => {
+
+                    return this.sitesProvider
+                        .newSite(data.siteUrl, data.token, data.privateToken)
+                        .then(() => {
+                            return this.loginHelper.goToSiteInitialPage();
+                            },
+                            (error) => {
+                            this.domUtils.showErrorModal(error);
+                        });
+                    },
+                    (error) => {
+                    this.loginHelper.treatUserTokenError(siteData.url, error);
+                }).finally(() => {
+                    modal.dismiss();
                 });
-            }, (error) => {
-                this.loginHelper.treatUserTokenError(siteData.url, error);
-            }).finally(() => {
-                modal.dismiss();
-            });
 
         } else {
             // Not a demo site.

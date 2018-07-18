@@ -78,12 +78,21 @@ export class CoreLoginHelperProvider {
     lastInAppUrl: string;
     waitingForBrowser = false;
 
-    constructor(logger: CoreLoggerProvider, private sitesProvider: CoreSitesProvider, private domUtils: CoreDomUtilsProvider,
-            private wsProvider: CoreWSProvider, private translate: TranslateService, private textUtils: CoreTextUtilsProvider,
-            private eventsProvider: CoreEventsProvider, private appProvider: CoreAppProvider, private utils: CoreUtilsProvider,
-            private urlUtils: CoreUrlUtilsProvider, private configProvider: CoreConfigProvider, private platform: Platform,
-            private initDelegate: CoreInitDelegate, private sitePluginsProvider: CoreSitePluginsProvider,
-            private location: Location) {
+    constructor(logger: CoreLoggerProvider,
+                private sitesProvider: CoreSitesProvider,
+                private domUtils: CoreDomUtilsProvider,
+                private wsProvider: CoreWSProvider,
+                private translate: TranslateService,
+                private textUtils: CoreTextUtilsProvider,
+                private eventsProvider: CoreEventsProvider,
+                private appProvider: CoreAppProvider,
+                private utils: CoreUtilsProvider,
+                private urlUtils: CoreUrlUtilsProvider,
+                private configProvider: CoreConfigProvider,
+                private platform: Platform,
+                private initDelegate: CoreInitDelegate,
+                private sitePluginsProvider: CoreSitePluginsProvider,
+                private location: Location) {
         this.logger = logger.getInstance('CoreLoginHelper');
     }
 

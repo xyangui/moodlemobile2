@@ -253,18 +253,23 @@ export const CORE_PROVIDERS: any[] = [
         CoreSyncProvider,
         CoreFileHelperProvider,
         {
-            provide: HTTP_INTERCEPTORS,
-            useClass: CoreInterceptor,
-            multi: true,
+            provide: HTTP_INTERCEPTORS,   //是令牌 (token)，它作为键值 (key) 使用，用于定位依赖值和注册提供商。
+            useClass: CoreInterceptor,    //告诉注入器，当有人请求HTTP_INTERCEPTORS时，返回CoreInterceptor。
+            multi: true,                  //http://origin.angular.live/docs/ts/latest/guide/dependency-injection.html#!#providers
         },
-        {provide: COMPILER_OPTIONS, useValue: {}, multi: true},
+        {provide: COMPILER_OPTIONS, useValue: {}, multi: true}, //有时，提供一个预先做好的对象会比请求注入器从类中创建它更容易。
         {provide: JitCompilerFactory, useClass: JitCompilerFactory, deps: [COMPILER_OPTIONS]},
+        // deps属性是提供商令牌数组。 Logger和UserService类作为它们自身类提供商的令牌。 注入器解析这些令牌，把相应的服务注入到工厂函数中相应的参数中去。
         {provide: LocationStrategy, useClass: MockLocationStrategy},
     ]
 })
 export class AppModule {
-    constructor(platform: Platform, initDelegate: CoreInitDelegate, updateManager: CoreUpdateManagerProvider, config: Config,
-            sitesProvider: CoreSitesProvider, fileProvider: CoreFileProvider) {
+    constructor(platform: Platform,
+                initDelegate: CoreInitDelegate,
+                updateManager: CoreUpdateManagerProvider,
+                config: Config,
+                sitesProvider: CoreSitesProvider,
+                fileProvider: CoreFileProvider) {
         // Register a handler for platform ready.
         initDelegate.registerProcess({
             name: 'CorePlatformReady',

@@ -209,9 +209,15 @@ export class CoreSitesProvider {
     protected appDB: SQLiteDB;
     protected siteTablesSchemas = []; // Schemas for site tables. Other providers can add schemas in here.
 
-    constructor(logger: CoreLoggerProvider, private http: HttpClient, private sitesFactory: CoreSitesFactoryProvider,
-            private appProvider: CoreAppProvider, private translate: TranslateService, private urlUtils: CoreUrlUtilsProvider,
-            private eventsProvider: CoreEventsProvider,  private textUtils: CoreTextUtilsProvider) {
+    constructor(logger: CoreLoggerProvider,
+                private http: HttpClient,
+                private sitesFactory: CoreSitesFactoryProvider,
+                private appProvider: CoreAppProvider,
+                private translate: TranslateService,
+                private urlUtils: CoreUrlUtilsProvider,
+                private eventsProvider: CoreEventsProvider,
+                private textUtils: CoreTextUtilsProvider) {
+
         this.logger = logger.getInstance('CoreSitesProvider');
 
         this.appDB = appProvider.getDB();
@@ -387,16 +393,17 @@ export class CoreSitesProvider {
 
         const promise = this.http.post(siteUrl + '/login/token.php', data).timeout(CoreConstants.WS_TIMEOUT).toPromise();
 
-        return promise.catch((error) => {
-            return Promise.reject(error.message);
-        }).then((data: any) => {
-            if (data.errorcode && (data.errorcode == 'enablewsdescription' || data.errorcode == 'requirecorrectaccess')) {
-                return Promise.reject({ errorcode: data.errorcode, error: data.error });
-            } else if (data.error && data.error == 'Web services must be enabled in Advanced features.') {
-                return Promise.reject({ errorcode: 'enablewsdescription', error: data.error });
-            }
-            // Other errors are not being checked because invalid login will be always raised and we cannot differ them.
-        });
+        return promise
+            .catch((error) => {
+                return Promise.reject(error.message);
+            }).then((data: any) => {
+                if (data.errorcode && (data.errorcode == 'enablewsdescription' || data.errorcode == 'requirecorrectaccess')) {
+                    return Promise.reject({ errorcode: data.errorcode, error: data.error });
+                } else if (data.error && data.error == 'Web services must be enabled in Advanced features.') {
+                    return Promise.reject({ errorcode: 'enablewsdescription', error: data.error });
+                }
+                // Other errors are not being checked because invalid login will be always raised and we cannot differ them.
+            });
     }
 
     /**
