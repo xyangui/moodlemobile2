@@ -38,6 +38,8 @@ export class CoreLoginSitePage {
     constructor(navParams: NavParams,
                 private navCtrl: NavController,
                 fb: FormBuilder,
+
+
                 private appProvider: CoreAppProvider,
                 private sitesProvider: CoreSitesProvider,
                 private loginHelper: CoreLoginHelperProvider,
